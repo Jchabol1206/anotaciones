@@ -3,10 +3,11 @@ package com.ies.Anotaciones;
 import java.util.ArrayList;
 import java.util.List;
 
-@DirectivoAnotado(apellido = "Ortegazo", direccion = "C/ A", dni = "74859612", nombre = "o", telefono = "987654321")
-@DirectivoAnotado(apellido = "Ortega", direccion = "C/ A", dni = "74859612", nombre = "Amancio", telefono = "987654321")
-@TecnicoAnotado(apellido = "Orteguita", direccion = "", dni = "", nombre = "Amancito", telefono = "", codigoTaller = 100)
-@OficialAnotado(apellido = "Orteguita", direccion = "", dni = "", nombre = "Amancito", telefono = "", codigoTaller = 100)
+@DirectivoAnotado(empleadoAnotado=@EmpleadoAnotado(apellido = "Ortegazo", direccion = "C/ A", dni = "74859612", nombre = "o", telefono = "987654321"), codigoDespacho=1)
+@DirectivoAnotado(empleadoAnotado=@EmpleadoAnotado(apellido = "Ortega", direccion = "C/ A", dni = "74859612", nombre = "Amancio", telefono = "987654321"), codigoDespacho=1)
+@TecnicoAnotado(empleadoAnotado=@EmpleadoAnotado(apellido = "Orteguita", direccion = "", dni = "", nombre = "Amancito", telefono = "", codigoTaller = 100), perfil="perfil")
+@OficialAnotado(empleadoAnotado=@EmpleadoAnotado(apellido = "Orteguita", direccion = "", dni = "", nombre = "Amancito", telefono = "", codigoTaller = 100), categoria="una")
+@OficialAnotado(empleadoAnotado=@EmpleadoAnotado(apellido = "Orteguita", direccion = "", dni = "", nombre = "Amancito", telefono = "", codigoTaller = 100), categoria="una")
 public class Empresa {
 	private String nombre;
 	private List<Empleado> listaEmpleados;
@@ -43,30 +44,28 @@ public class Empresa {
 	public static Empresa cargadorContexto() {
 		Empresa empresa = new Empresa();
 		
-		EmpleadoAnotado[] anotadoEmpleado = Empresa.class.getDeclaredAnnotationsByType(EmpleadoAnotado.class);
+		DirectivoAnotado[] anotadoDirectivo = Empresa.class.getDeclaredAnnotationsByType(DirectivoAnotado.class);
+		OficialAnotado[] anotadoOficial = Empresa.class.getDeclaredAnnotationsByType(OficialAnotado.class);
+		TecnicoAnotado[] anotadoTecnico = Empresa.class.getDeclaredAnnotationsByType(TecnicoAnotado.class);
 		
-		for(EmpleadoAnotado anotadoEmpleados: anotadoEmpleado) {
+		for(DirectivoAnotado anotadoDirectivos:anotadoDirectivo) {
 			
-			if(anotadoEmpleados.clase().equals("Directivo")) {
-				Directivo directivo = new Directivo();
-				directivo.setNombre(anotadoEmpleados.nombre());
-				empresa.aniadirEmpleado(directivo);
-			}
-			if(anotadoEmpleados.clase().equals("Oficial")) {
-				Oficial oficial = new Oficial();
-				
-				oficial.setNombre(anotadoEmpleados.nombre());
-				empresa.aniadirEmpleado(oficial);
-			}
-			if(anotadoEmpleados.clase().equals("Tecnico")) {
-				Tecnico tecnico = new Tecnico();
-				
-				tecnico.setNombre(anotadoEmpleados.nombre());
-				empresa.aniadirEmpleado(tecnico);
-			}
-			
+			Directivo directivo = new Directivo();
+			directivo.setNombre(anotadoDirectivos.empleadoAnotado().nombre());
+			empresa.aniadirEmpleado(directivo);
 		}
 		
+		for(OficialAnotado anotadoOficiales:anotadoOficial) {
+			Oficial oficial = new Oficial();
+			oficial.setNombre(anotadoOficiales.empleadoAnotado().nombre());
+			empresa.aniadirEmpleado(oficial);
+		}
+		
+		for(TecnicoAnotado anotadoTecnicos:anotadoTecnico) {
+			Tecnico tecnico = new Tecnico();
+			tecnico.setNombre(anotadoTecnicos.empleadoAnotado().nombre());
+			empresa.aniadirEmpleado(tecnico);
+		}
 		
 		
 		

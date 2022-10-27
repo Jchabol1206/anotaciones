@@ -16,6 +16,8 @@ public @interface EmpleadoAnotado {
 	String direccion();
 	String telefono();
 	
+	int codigoTaller() default -1;
+	
 	
 
 }

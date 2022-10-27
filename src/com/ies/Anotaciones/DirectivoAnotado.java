@@ -6,7 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 
 @Repeatable(Directivos.class)
 @Retention(RetentionPolicy.RUNTIME)
-@EmpleadoAnotado(apellido = "", direccion = "", dni = "", nombre = "", telefono = "")
+
 public @interface DirectivoAnotado {
+	EmpleadoAnotado empleadoAnotado();
+	int codigoDespacho() default -1;
+	
+	
 	
 }
